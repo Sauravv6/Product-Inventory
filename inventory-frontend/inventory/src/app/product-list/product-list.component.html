@@ -1,0 +1,119 @@
+
+<div class="container py-4" style="background-color:#ede8f5; border-radius:10px;">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold" style="color:#3d52a0;">Product Inventory</h2>
+
+    <div class="d-flex">
+      <input type="text" class="form-control w-50 me-2 rounded-pill" placeholder="Search product..."
+        [(ngModel)]="searchQuery" (input)="filterProducts()">
+
+      <button class="btn text-white rounded-pill px-3 py-2 shadow add-product-btn" 
+        (click)="addProduct()">
+        <i class="bi bi-plus-circle-fill me-2"></i> Add Product
+      </button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div [class.col-md-12]="!selectedProduct" [class.col-md-7]="selectedProduct">
+      <table class="table table-hover shadow-sm rounded overflow-hidden">
+        <thead style="background-color:#8697c4; color:white;">
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Manufacturer</th>
+            <th>Price (₹)</th>
+            <th>Quantity</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let product of filteredProducts">
+            <td>{{ product.name }}</td>
+            <td>{{ product.description }}</td>
+            <td>{{ product.manufacturer }}</td>
+            <td>₹{{ product.price }}</td>
+            <td>{{ product.quantity }}</td>
+            <td>
+
+              <button class="btn btn-sm rounded-pill text-white me-2 edit-btn" 
+                (click)="editProduct(product)">
+                <i class="bi bi-pencil-square"></i>
+              </button>
+
+              <button class="btn btn-sm rounded-pill text-white delete-btn" 
+                (click)="deleteProduct(product.id)">
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="selectedProduct" class="col-md-5">
+      <div class="card shadow-sm border-0" style="background-color:#adbbda;">
+        <div class="card-header text-white d-flex justify-content-between align-items-center" style="background-color:#3d52a0;">
+          <h5 class="mb-0">{{ isAddingNew ? 'Add Product' : 'Edit Product' }}</h5>
+          <button class="btn-close btn-close-white" (click)="closePanel()"></button>
+        </div>
+
+        <div class="card-body">
+          <form #productForm="ngForm" (ngSubmit)="isAddingNew ? saveProduct() : updateProduct()">
+
+            <div class="mb-3">
+              <label class="form-label">Name</label>
+              <input type="text" class="form-control rounded-3" [(ngModel)]="selectedProduct.name" name="name" required
+                #name="ngModel" placeholder="Enter product name"
+                [class.is-invalid]="name.invalid && (name.touched || name.dirty)">
+              <div class="invalid-feedback">Product name is required.</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Description</label>
+              <textarea class="form-control rounded-3" [(ngModel)]="selectedProduct.description" name="description" required
+                #description="ngModel" placeholder="Enter description"
+                [class.is-invalid]="description.invalid && (description.touched || description.dirty)">
+              </textarea>
+              <div class="invalid-feedback">Description is required.</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Manufacturer</label>
+              <input type="text" class="form-control rounded-3" [(ngModel)]="selectedProduct.manufacturer" name="manufacturer" required
+                #manufacturer="ngModel" placeholder="Enter manufacturer"
+                [class.is-invalid]="manufacturer.invalid && (manufacturer.touched || manufacturer.dirty)">
+              <div class="invalid-feedback">Manufacturer is required.</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Price (₹)</label>
+              <input type="number" class="form-control rounded-3" [(ngModel)]="selectedProduct.price" name="price" required min="1"
+                #price="ngModel" placeholder="Enter price"
+                [class.is-invalid]="price.invalid && (price.touched || price.dirty)">
+              <div class="invalid-feedback">Enter a valid price (minimum ₹1).</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Quantity</label>
+              <input type="number" class="form-control rounded-3" [(ngModel)]="selectedProduct.quantity" name="quantity" required min="1"
+                #quantity="ngModel" placeholder="Enter quantity"
+                [class.is-invalid]="quantity.invalid && (quantity.touched || quantity.dirty)">
+              <div class="invalid-feedback">Enter a valid quantity (minimum 1).</div>
+            </div>
+
+            <button type="submit" class="btn text-white rounded-pill shadow-sm me-2 save-btn" 
+              [disabled]="productForm.invalid">
+              <i class="bi bi-check-circle-fill me-2"></i> {{ isAddingNew ? 'Add Product' : 'Save Changes' }}
+            </button>
+
+            <button type="button" class="btn btn-outline-danger rounded-pill shadow-sm" (click)="closePanel()">
+              <i class="bi bi-x-circle-fill me-2"></i>Cancel
+            </button>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

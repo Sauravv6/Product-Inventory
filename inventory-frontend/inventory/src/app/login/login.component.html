@@ -1,0 +1,35 @@
+<div class="container d-flex justify-content-center align-items-center" style="min-height:80vh; background-color:#ede8f5; border-radius:10px;">
+  <div class="card shadow-lg border-0" style="width:380px; background-color:#adbbda; border-radius:15px;">
+    <div class="card-header text-center text-white py-2" style="background-color:#3d52a0; border-top-left-radius:15px; border-top-right-radius:15px;">
+      <h4 class="mb-0">Login</h4>
+    </div>
+
+    <div class="card-body p-3">
+      <form #loginForm="ngForm" (submit)="login(); $event.preventDefault()">
+        <div class="mb-2">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-control rounded-3" [(ngModel)]="credentials.email" name="email" required #email="ngModel" placeholder="Enter your email" />
+          <div *ngIf="email.invalid && email.touched" class="text-danger small">
+            * Valid email is required
+          </div>
+        </div>
+  
+        <div class="mb-2">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-control rounded-3" [(ngModel)]="credentials.password" name="password" required minlength="6" #password="ngModel" placeholder="Enter your password" />
+          <div *ngIf="password.invalid && password.touched" class="text-danger small">
+            * Password must be at least 6 characters
+          </div>
+        </div>
+
+        <button type="submit" class="btn w-100 text-white rounded-pill shadow-sm py-2 mt-2" style="background-color:#7091e6;" [disabled]="loginForm.invalid">
+          <i class="bi bi-box-arrow-in-right me-2"></i>Login
+        </button>
+      </form>
+
+      <p class="text-center mt-2 mb-0">Haven't registered yet?
+        <a routerLink="/register" class="fw-bold" style="color:#3d52a0;">Register</a>
+      </p>
+    </div>
+  </div>
+</div>
